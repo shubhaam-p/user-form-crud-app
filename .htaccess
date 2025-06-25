@@ -1,0 +1,29 @@
+# BEGIN Cache-Control Headers
+<ifModule mod_headers.c>
+
+  Header set Access-Control-Allow-Origin "*"
+  Header set Access-Control-Allow-Headers: "headers, Origin, X-Requested-With, Content-Type, Accept, Authorization"
+
+</ifModule>
+# END Cache-Control Headers
+
+Options +FollowSymlinks
+RewriteEngine on
+RewriteBase /
+DirectorySlash Off
+
+
+RewriteRule ^/?$ views/form.php [L,QSA]
+RewriteRule ^new-cont-reg$ controller/Controller.php?n=$1 [NC,L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+
+
+# php_flag display_errors on
+# php_flag display_startup_errors on
+# php_flag display_errors on
+# php_flag html_errors on
+# php_value docref_root 1
+# php_value docref_ext 1
