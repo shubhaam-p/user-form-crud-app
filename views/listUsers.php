@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<h2>HTML Table</h2>
+<h2>Users</h2>
 
 <!-- <div id="listUser"></div> -->
 
