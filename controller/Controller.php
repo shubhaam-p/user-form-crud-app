@@ -15,6 +15,7 @@ $arrActions=array();
 
 $arrActions['addUser'] 			= '../action/AddUser.php';
 $arrActions['editUserDetails']  = '../action/EditUserDetails.php';// to soft delete and edit user details
+$arrActions['listUserDetails']  = '../action/ListUserDetails.php';// to soft delete and edit user details
 
 $action = $_REQUEST['action'];
 if($arrActions[$action]) {

@@ -4,12 +4,12 @@ $(document).ready (function () {
     // user - add review
     $('form[id="addUserForm"]').validate({  
         rules: {  
-            // name: 'required',
-            // pwd: 'required',
-            // dob: 'required',
-            // emailid: {
-            //     email: true,  
-            // }
+            name: 'required',
+            pwd: 'required',
+            dob: 'required',
+            emailid: {
+                email: true,  
+            }
         },  
         messages: {  
             name: 'This field is required',
@@ -18,7 +18,7 @@ $(document).ready (function () {
             custEmailId: 'Enter a valid email',
         },  
         submitHandler: async function(form) {
-            onclickLoading('submitBtn');
+            onclickLoading('submitBtn', webURL);
             $('.submit-response-msg').empty()
             $('.submit-response-msg').show();
             // Constants for XML parameters
@@ -26,12 +26,17 @@ $(document).ready (function () {
             const XML_PARAMETER_EMAILID = "emailId";
             const XML_PARAMETER_DOB = "dob";
             const XML_PARAMETER_PWD = "pwd";
-            const actionURL = 'addUser';
+            const XML_PARAMETER_EDIT = "edit";
+            const XML_PARAMETER_NID = "nid";
+
+            const actionURL = $("#actionURL").val();
 
             let uName = $("#name").val();
             let dob = $("#dob").val();
             let emailId = $("#email").val();
             let pwd = $("#pwd").val();
+            const isEdit = $("#isEdit").val();
+            const nid = $("#userId").val();
 
             const queryXML = `<?xml version='1.0'?>`
                 + `<query>`
@@ -40,6 +45,8 @@ $(document).ready (function () {
                 + getXMLString(XML_PARAMETER_EMAILID, () => emailId )
                 + getXMLString(XML_PARAMETER_DOB, () => dob)
                 + getXMLString(XML_PARAMETER_PWD, () => pwd )
+                + getXMLString(XML_PARAMETER_EDIT, () => isEdit )
+                + getXMLString(XML_PARAMETER_NID, () => nid )
                 + `</query>`;
 
             await makeAjaxCall({
@@ -52,7 +59,12 @@ $(document).ready (function () {
                     //uncheck stars
                     $('label').removeClass('active');
                     console.log("reset form")
-                    $('.submit-response-msg').empty().show().html("<h5 class='bg-white my-3 py-2 text-success'>Thank you for your response!<h5>").delay(delayInSec).fadeOut(300);
+                    let msg = 'Form submitted successfully!';
+                    if(isEdit == '1'){
+                        msg = "Record updated successfully!"
+                        setTimeout('redirect("/list")', 2000);  
+                    }
+                    $('.submit-response-msg').empty().show().html("<h5 class='bg-white my-3 py-2 text-success'>"+msg+"<h5>").delay(delayInSec).fadeOut(300);
                 } else if(res.error === 1){
                     $('.submit-response-msg').empty().show().html("<h5 class='my-3 py-2 text-red'>Error while submitting the form!!<h5>").delay(delayInSec).fadeOut(300);
 

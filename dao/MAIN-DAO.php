@@ -79,14 +79,14 @@ Class MAIN_DAO extends AbstractDAO{
     public function getAllUsers($main_dvo) {
         $returnVal = [];
         try {
-            $query = "SELECT id, name, pwd, dob FROM user WHERE NSTATUS = 1 ORDER BY id DESC";
+            $query = "SELECT id, name, email_id, dob FROM user WHERE NSTATUS = 1 ORDER BY id DESC";
             $stmt = $this->myslqi->prepare($query);
-            $UNIQUEID = $NAME = $PWD = $DOB = array(); 
+            $UNIQUEID = $NAME = $EMAILID = $DOB = array(); 
 
             if ($stmt->execute()) {
-                $stmt->bind_result($UNIQUEID, $NAME, $PWD, $DOB);
+                $stmt->bind_result($UNIQUEID, $NAME, $EMAILID, $DOB);
                 while ($stmt->fetch()) {
-                    array_push($returnVal, array('ID'=>$UNIQUEID, 'NAME'=>$NAME, 'PWD'=>$PWD, 'DOB'=>$DOB));
+                    array_push($returnVal, array('ID'=>$UNIQUEID, 'NAME'=>$NAME, 'EMAILID'=>$EMAILID, 'DOB'=>$DOB));
                 }
             } else {
                 $this->logError($this->myslqi->errno, $this->myslqi->error, 'getAllUsers');
@@ -98,7 +98,35 @@ Class MAIN_DAO extends AbstractDAO{
         }
         return $returnVal;
     }
-   //user - name, email_id, dob, pwd, nstatus, createdon, updatedon, deletedon
+
+    public function getUserDetails($main_dvo) {
+        $returnVal = [];
+        try {
+            $query = "SELECT id, name, email_id, dob FROM user WHERE NSTATUS = 1 AND id = ?";
+            $UNIQUEID = $NAME = $EMAILID = $DOB = array(); 
+
+            try {
+                $stmt = $this->myslqi->prepare($query);
+                $stmt->bind_param('i', $main_dvo->UNIQUEID);
+            } catch (\Throwable $th) {
+                $this->logException($th);
+                return $returnVal;
+            }
+
+            if ($stmt->execute()) {
+                $stmt->bind_result($UNIQUEID, $NAME, $EMAILID, $DOB);
+                while ($stmt->fetch()) {
+                    array_push($returnVal, array('ID'=>$UNIQUEID, 'NAME'=>$NAME, 'EMAILID'=>$EMAILID, 'DOB'=>$DOB));}
+            } else {
+                $this->logError($this->myslqi->errno, $this->myslqi->error, 'getUserDetails');
+            }
+            $stmt->free_result();
+            $stmt->close();
+        } catch (Exception $e) {
+            $this->logException($e);
+        }
+        return $returnVal;
+    }
 
 }
 ?>

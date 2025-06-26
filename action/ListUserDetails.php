@@ -9,21 +9,33 @@
     $main_dao = new MAIN_DAO();
     $functions = new Functions();
 
-    $returnArray = $UserDetails = [];
+    $returnArray = $UserData = [];
     $save = $error = $msg = '';
 
-    $UserDetails = $main_dao->getAllUsers($main_dvo);
+    $userId = $userDetails = '';
+    if(isset($_GET['userDetails']) && $_GET['userDetails'] != '') {
+        $userDetails = $functions->sanitizeInput($_GET['userDetails']);
+    }
 
-    if(count($UserDetails)>0){
+    if(isset($_GET['userId']) && $_GET['userId'] != '') {
+        $main_dvo->UNIQUEID = $userId = $functions->sanitizeInput($_GET['userId']);
+    }
+
+    if(isset($userDetails) &&  isset($userId) && $userDetails)
+        $UserData = $main_dao->getUserDetails($main_dvo);
+    else
+        $UserData = $main_dao->getAllUsers($main_dvo);
+
+    if(count($UserData)>0){
         $returnArray['save'] = 1;
         $returnArray['error'] = 0;
         $returnArray['msg'] = 'Get Data successfully';
-        $returnArray['data'] = $UserDetails;
+        $returnArray['data'] = $UserData;
     }else{
         $returnArray['save'] = 1;
         $returnArray['error'] = 0;
         $returnArray['msg'] = 'No data found/ some error occurred';
-        $returnArray['data'] = $UserDetails;
+        $returnArray['data'] = $UserData;
     }
     echo json_encode($returnArray);
     exit();

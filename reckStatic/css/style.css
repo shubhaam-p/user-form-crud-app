@@ -32,3 +32,30 @@ input[type=submit]:hover {
 label.error{ 
   color:red;
 }
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+ .edit-action-btn, .delete-action-btn{
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    padding-right:2rem;
+  }
